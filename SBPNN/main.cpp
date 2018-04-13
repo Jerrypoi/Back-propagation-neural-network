@@ -24,10 +24,9 @@ int main(int argc, const char * argv[]) {
     double out[out_n];
     SBPNN *net = createBPNN(input_n, hidden_n, out_n);
     char filename[100] = "sample_data";
-    cout<<"Please input the file name"<<endl;
     //cin>>filename;
     ifstream file(filename);
-    if(!file.is_open()) {
+    while(!file.is_open()) {
         cerr<<"Opening file failure! Enter new file name";
         cin>>filename;
         file.open(filename);
@@ -39,9 +38,11 @@ int main(int argc, const char * argv[]) {
         for(i = 0;i < out_n;i++)
             cin>>out[i];
         train(net, input, input_n, out, out_n, &err, &temp);
-        char save_filename[100] ="resultdata";
-        saveBPNN(net, save_filename);
+        std::cout<<"traning success."<<endl;
+        
     }
+    char save_filename[100] ="resultdata";
+    saveBPNN(net, save_filename);
     cout<<"Train completed."<<endl;
     
     
