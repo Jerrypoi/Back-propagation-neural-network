@@ -91,7 +91,8 @@ void train(SBPNN *net, double *input_unit,int input_num, double *target,int targ
     for(int i = 0;i < target_num;i++) {
         net->target[i] = target[i];
     }
-    layerforward(net->input_units, net->hidden_units, net->hidden_weights, net->input_n, net->hidden_n);
+
+    layerforward(net->input_units, net->hidden_units, net->input_weights, net->input_n, net->hidden_n);
     layerforward(net->hidden_units, net->output_units, net->hidden_weights, net->hidden_n, net->output_n);
     getOutputError(net->output_delta, net->target, net->output_units, net->output_n, eo);
     getHiddenError(net->hidden_delta, net->hidden_n, net->output_delta, net->output_n, net->hidden_weights, net->hidden_units, eh);
@@ -127,7 +128,7 @@ void layerforward(double *l1, double *l2, double **conn, int n1, int n2) {
     for(int i = 0;i < n2;i++) {
         l2[i] = conn[0][i];
         for(int j = 1;j <n1 + 1;j++)
-            l2[i] += l1[j] * conn[j][i];
+            l2[i] += l1[j - 1] * conn[j][i];
         l2[i] = sigmoidal(l2[i]);
     }
 }
@@ -187,7 +188,13 @@ void freeBPNN(SBPNN * net) {
 }
 
 void saveBPNN(SBPNN * net, char *filename) {
+    
     std::ofstream file(filename);
+    while(!file.is_open()) {
+        std::cout<<"file open failure, enter a new file name"<<endl;
+        std::cin>> filename;
+        file.open(filename);
+    }
     if(file.is_open()) {
         file<<net->input_n<<endl;
         file<<net->hidden_n<<endl;

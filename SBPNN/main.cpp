@@ -27,24 +27,26 @@ int main(int argc, const char * argv[]) {
     //cin>>filename;
     ifstream file(filename);
     while(!file.is_open()) {
-        cerr<<"Opening file failure! Enter new file name";
+        cout<<"Opening file failure! Enter new file name"<<endl;
         cin>>filename;
         file.open(filename);
     }
+
     initSeed((int)time(NULL));
+    cout<<"file open success."<<endl;
     while (!file.eof()) {
         for(i = 0;i < input_n;i++)
-            cin>>input[i];
+            file>>input[i];
         for(i = 0;i < out_n;i++)
-            cin>>out[i];
+            file>>out[i];
         train(net, input, input_n, out, out_n, &err, &temp);
-        std::cout<<"traning success."<<endl;
+        cout<<"traning success."<<endl;
         
     }
     char save_filename[100] ="resultdata";
     saveBPNN(net, save_filename);
     cout<<"Train completed."<<endl;
-    
+    freeBPNN(net);
     
     return 0;
 }
