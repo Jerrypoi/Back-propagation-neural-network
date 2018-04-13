@@ -146,7 +146,7 @@ void getHiddenError(double* delta_h, int nh, double *delta_o, int no, double **w
     
     *err = 0;
 
-    for(int i = 0; i < nh;i++) {
+    for(int i = 1; i < nh;i++) {
         double sum = 0;
         for(int j = 0;j < no;j++)
             sum += delta_o[j] * who[i + 1][j];
