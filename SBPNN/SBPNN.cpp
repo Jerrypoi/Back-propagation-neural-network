@@ -256,7 +256,7 @@ SBPNN * createBPNN(int n_in,int n_hidden,int n_out) {
     bpnn->input_weights = new double*[bpnn->input_n + 1];
     for(int i = 0;i < bpnn->input_n + 1;i++) {
         bpnn->input_weights[i] = new double[bpnn->hidden_n];
-        for(int j = 0;i < bpnn->hidden_n;j++) {
+        for(int j = 0;j < bpnn->hidden_n;j++) {
             bpnn->input_weights[i][j] = fRand(-0.05, 0.05);
         }
     }
