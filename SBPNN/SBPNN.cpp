@@ -104,6 +104,7 @@ void train(SBPNN *net, double *input_unit,int input_num, double *target,int targ
 
 void adjustWeights(double *delta, int ndelta, double *ly, int nly, double** w, double **oldw, double eta, double momentum) {
 //    hidden_weights = hidden_prev_weights + eta*output_delta*hidden_units + momentum*hidden_prev_weights
+    //input_weights = input_prev_weights + eta*hidden_delta*input_units + momentum*input_prev_weights
     for(int i = 0;i < nly;i++) {
         for(int j = 0;j < ndelta;j++) {
             if(i == 0) {
@@ -281,18 +282,18 @@ SBPNN * createBPNN(int n_in,int n_hidden,int n_out) {
     for(int i = 0;i < bpnn->input_n + 1;i++) {
         bpnn->input_prev_weights[i] = new double[bpnn->hidden_n];
         for(int j = 0;j < bpnn->hidden_n;j++) {
-            bpnn->input_prev_weights[i][j] = 0;
+            bpnn->input_prev_weights[i][j] = bpnn->input_weights[i][j];
         }
     }
     bpnn->hidden_prev_weights = new double*[bpnn->hidden_n + 1];
     for(int i = 0;i < bpnn->hidden_n + 1;i++) {
         bpnn->hidden_prev_weights[i] = new double[bpnn->output_n];
         for(int j = 0;j < bpnn->output_n;j++) {
-            bpnn->hidden_prev_weights[i][j] = 0;
+            bpnn->hidden_prev_weights[i][j] = bpnn->hidden_weights[i][j];
         }
     }
     bpnn->eta = 0.3;
     bpnn->momentum = 0.3;
-    std::cout<<"Create SBNPP success."<<endl;
+    std::cout<<"Create SBNPP succeeded."<<endl;
     return bpnn;
 }
