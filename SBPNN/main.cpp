@@ -43,6 +43,13 @@ int main(int argc, const char * argv[]) {
         cout<<"traning success."<<endl;
         
     }
+    //Use this for testing.
+    for(int i = 0;i < input_n + 1;i++) {
+        for(int j = 0;j < hidden_n;j++)
+            cout<<net->input_weights[i][j]<<" ";
+        cout<<endl;
+        
+    }
     char save_filename[100] ="resultdata";
     saveBPNN(net, save_filename);
     cout<<"Train completed."<<endl;
