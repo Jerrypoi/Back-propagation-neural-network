@@ -66,12 +66,14 @@ void adjustWeights(double *delta, int ndelta, double *ly, int nly, double** w, d
         for(int j = 0;j < ndelta;j++) {
             if(i == 0) {
                 double temp = w[i][j];
-                w[i][j] = oldw[i][j] + eta * delta[j] * 1 + momentum * oldw[i][j];
+                //w[i][j] = oldw[i][j] + eta * delta[j] * 1 + momentum * oldw[i][j];
+                w[i][j] = w[i][j] - eta * delta[j] * 1;
                 oldw[i][j] = temp;
             }
             else {
                 double temp = w[i][j];
-                w[i][j] = oldw[i][j] + eta * delta[j] * ly[i] + momentum * oldw[i][j];
+                //w[i][j] = oldw[i][j] + eta * delta[j] * ly[i] + momentum * oldw[i][j];
+                w[i][j] = w[i][j] - eta * delta[j] * ly[i];
                 oldw[i][j] = temp;
             }
         }
@@ -104,7 +106,7 @@ void getHiddenError(double* delta_h, int nh, double *delta_o, int no, double **w
     //nh = inputweights[?][nh]
     
     *err = 0;
-
+    
     for(int i = 1; i < nh;i++) {
         double sum = 0;
         for(int j = 0;j < no;j++)
