@@ -27,20 +27,6 @@ void getOutputError(double *delta, double *target, double *output, int nj, doubl
 
 void layerforward(double *l1, double *l2, double **conn, int n1, int n2); //执行一次l1到l2的前向传播, conn是连接的加权系数
 double sigmoidal(double x);
-
-
-//3. 关于BP神经网络的训练算法train的说明:
-//对于训练样本中的某个样本:
-//{
-//    layerforward(...);//从输入到隐藏前向传播
-//    layerforward(...);//从输入到隐藏前向传播
-//
-//    getOutputError(...);   //计算输出层误差
-//    getHiddenError(...);   //计算隐藏层误差
-//
-//    adjustWeights(...); //调整隐藏层到输出层加权系数
-//    adjustWeights(...); //调整输入层到隐藏层加权系数
-//}
 void train(SBPNN *net, double *input_unit,int input_num, double *target,int target_num, double *eo, double *eh) {
     for(int i = 0;i < input_num;i++) {
         net->input_units[i] = input_unit[i];
@@ -51,11 +37,21 @@ void train(SBPNN *net, double *input_unit,int input_num, double *target,int targ
 
     layerforward(net->input_units, net->hidden_units, net->input_weights, net->input_n, net->hidden_n);
     layerforward(net->hidden_units, net->output_units, net->hidden_weights, net->hidden_n, net->output_n);
+    
     getOutputError(net->output_delta, net->target, net->output_units, net->output_n, eo);
     getHiddenError(net->hidden_delta, net->hidden_n, net->output_delta, net->output_n, net->hidden_weights, net->hidden_units, eh);
     adjustWeights(net->output_delta, net->output_n, net->hidden_units, net->hidden_n, net->hidden_weights, net->hidden_prev_weights, net->eta, net->momentum);
     adjustWeights(net->hidden_delta, net->hidden_n, net->input_units, net->input_n, net->input_weights, net->input_prev_weights, net->momentum, net->eta);
-    
+    std::cout<<"Train comleted."<<endl;
+    for(int i = 0;i < net->output_n;i ++)
+        std::cout<<net->output_units[i]<<" ";
+    std::cout<<"input_weights:"<<endl;
+//    for(int i = 0;i < net->input_n + 1;i++) {
+//        for(int j = 0;j < net->hidden_n;j++)
+//            std::cout<<net->input_weights[i][j]<<" ";
+//        std::cout<<endl;
+//    }
+    std::cout<<endl;
     
 }
 
@@ -89,6 +85,7 @@ void layerforward(double *l1, double *l2, double **conn, int n1, int n2) {
         l2[i] = conn[0][i];
         for(int j = 1;j <n1 + 1;j++)
             l2[i] += l1[j - 1] * conn[j][i];
+        std::cout<<"l2[i] equas "<<l2[i]<<endl;
         l2[i] = sigmoidal(l2[i]);
     }
 }
@@ -97,22 +94,19 @@ void getOutputError(double *delta, double *target, double *output, int nj, doubl
     *err = 0;
     for(int i = 0;i < nj;i++) {
         delta[i] = -(target[i] - output[i])*(output[i] - (1 - output[i]));
-        *err += abs(target[i] - output[i]);
+        *err += fabs((double)target[i] - output[i]);
     }
 }
 
 
 void getHiddenError(double* delta_h, int nh, double *delta_o, int no, double **who, double *hidden, double *err) {
     //nh = inputweights[?][nh]
-    
     *err = 0;
-    
     for(int i = 1; i < nh;i++) {
         double sum = 0;
         for(int j = 0;j < no;j++)
             sum += delta_o[j] * who[i + 1][j];
         delta_h[i] = sum * hidden[i] * (1 - hidden[i]);
-// ?        err +=
     }
     
 }
@@ -219,7 +213,6 @@ SBPNN * createBPNN(int n_in,int n_hidden,int n_out) {
     bpnn->target = new double[bpnn->output_n];
     bpnn->hidden_delta = new double[bpnn->hidden_n];
     bpnn->output_delta = new double[bpnn->output_n];
-    
     bpnn->input_weights = new double*[bpnn->input_n + 1];
     for(int i = 0;i < bpnn->input_n + 1;i++) {
         bpnn->input_weights[i] = new double[bpnn->hidden_n];
@@ -251,7 +244,7 @@ SBPNN * createBPNN(int n_in,int n_hidden,int n_out) {
             bpnn->hidden_prev_weights[i][j] = bpnn->hidden_weights[i][j];
         }
     }
-    bpnn->eta = 0.3;
+    bpnn->eta = 0.003;
     bpnn->momentum = 0.3;
     std::cout<<"Create SBNPP success."<<endl;
     return bpnn;
