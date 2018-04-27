@@ -27,6 +27,9 @@ void getOutputError(double *delta, double *target, double *output, int nj, doubl
 
 void layerforward(double *l1, double *l2, double **conn, int n1, int n2); //执行一次l1到l2的前向传播, conn是连接的加权系数
 double sigmoidal(double x);
+void test(SBPNN *net, double *input_unit,int input_num,double *target,int target_num) {
+    
+}
 void train(SBPNN *net, double *input_unit,int input_num, double *target,int target_num, double *eo, double *eh) {
     for(int i = 0;i < input_num;i++) {
         net->input_units[i] = input_unit[i];
@@ -40,24 +43,26 @@ void train(SBPNN *net, double *input_unit,int input_num, double *target,int targ
     
     getOutputError(net->output_delta, net->target, net->output_units, net->output_n, eo);
     getHiddenError(net->hidden_delta, net->hidden_n, net->output_delta, net->output_n, net->hidden_weights, net->hidden_units, eh);
+    
     adjustWeights(net->output_delta, net->output_n, net->hidden_units, net->hidden_n, net->hidden_weights, net->hidden_prev_weights, net->eta, net->momentum);
     adjustWeights(net->hidden_delta, net->hidden_n, net->input_units, net->input_n, net->input_weights, net->input_prev_weights, net->momentum, net->eta);
-    std::cout<<"Train comleted."<<endl;
-    for(int i = 0;i < net->output_n;i ++)
-        std::cout<<net->output_units[i]<<" ";
-    std::cout<<"input_weights:"<<endl;
+//    std::cout<<"Train comleted."<<endl;
+//    for(int i = 0;i < net->output_n;i ++)
+//        std::cout<<net->output_units[i]<<" ";
+//    std::cout<<"input_weights:"<<endl;
 //    for(int i = 0;i < net->input_n + 1;i++) {
 //        for(int j = 0;j < net->hidden_n;j++)
 //            std::cout<<net->input_weights[i][j]<<" ";
 //        std::cout<<endl;
 //    }
-    std::cout<<endl;
+//    std::cout<<endl;
     
 }
 
 void adjustWeights(double *delta, int ndelta, double *ly, int nly, double** w, double **oldw, double eta, double momentum) {
 //    hidden_weights = hidden_prev_weights + eta*output_delta*hidden_units + momentum*hidden_prev_weights
     //input_weights = input_prev_weights + eta*hidden_delta*input_units + momentum*input_prev_weights
+    
     for(int i = 0;i < nly;i++) {
         for(int j = 0;j < ndelta;j++) {
             if(i == 0) {
@@ -75,6 +80,7 @@ void adjustWeights(double *delta, int ndelta, double *ly, int nly, double** w, d
         }
     }
 }
+    //adjustWeights(net->hidden_delta, net->hidden_n, net->input_units, net->input_n, net->input_weights, net->input_prev_weights, net->momentum, net->eta);
 
 double sigmoidal(double x) {
     return 1 / (1 + exp(-x));
@@ -85,7 +91,7 @@ void layerforward(double *l1, double *l2, double **conn, int n1, int n2) {
         l2[i] = conn[0][i];
         for(int j = 1;j <n1 + 1;j++)
             l2[i] += l1[j - 1] * conn[j][i];
-        std::cout<<"l2[i] equas "<<l2[i]<<endl;
+//        std::cout<<"l2[i] equas "<<l2[i]<<endl;
         l2[i] = sigmoidal(l2[i]);
     }
 }
@@ -93,8 +99,8 @@ void layerforward(double *l1, double *l2, double **conn, int n1, int n2) {
 void getOutputError(double *delta, double *target, double *output, int nj, double *err) {
     *err = 0;
     for(int i = 0;i < nj;i++) {
-        delta[i] = -(target[i] - output[i])*(output[i] - (1 - output[i]));
-        *err += fabs((double)target[i] - output[i]);
+        delta[i] = -(target[i] - output[i])*output[i] * (1 - output[i]);
+        *err += fabs(target[i] - output[i]);
     }
 }
 
@@ -244,7 +250,7 @@ SBPNN * createBPNN(int n_in,int n_hidden,int n_out) {
             bpnn->hidden_prev_weights[i][j] = bpnn->hidden_weights[i][j];
         }
     }
-    bpnn->eta = 0.003;
+    bpnn->eta = 0.1;
     bpnn->momentum = 0.3;
     std::cout<<"Create SBNPP success."<<endl;
     return bpnn;
