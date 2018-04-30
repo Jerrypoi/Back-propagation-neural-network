@@ -46,8 +46,6 @@ class BPNet {
     double getError();
     void layerforward();
 public:
-    
-    
     void saveBPNN(std::ofstream &file);
     BPNet(int n_in,int n_hidden,int n_out);
     BPNet(std::ifstream &file);

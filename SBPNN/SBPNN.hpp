@@ -32,37 +32,14 @@ struct SBPNN {
     double **hidden_prev_weights; // 前次隐藏层到输出层权值的改变
     double eta;                   // 学习速率,初始值0.3, hidden_weights = hidden_prev_weights + eta*output_delta*hidden_units + momentum*hidden_prev_weights
     double momentum;              // 动量系数,初始值0.3, input_weights = input_prev_weights + eta*hidden_delta*input_units + momentum*input_prev_weights
-    
-    //    SBPNN() {
-    //        input_units = new double[input_n];
-    //        hidden_units = new double[hidden_n];
-    //        output_units = new double[output_n];
-    //        hidden_delta = new double[hidden_n];
-    //        output_delta = new double[output_n];
-    //        input_weights = new double*[input_n + 1];
-    //        for(int i = 0;i < input_n + 1;i++) {
-    //            input_weights[i] = new double[hidden_n];
-    //        }
-    //
-    //        //TODO: Initilize the weights here
-    //
-    //        hidden_weights = new double*[hidden_n + 1];
-    //        for(int i = 0;i < input_n;i++) {
-    //            hidden_weights[i] = new double[output_n];
-    //        }
-    //        //TODO: initilize input_prev_weights and hidden..
-    //        eta = 0.3;
-    //        momentum = 0.3;
-    //    }
 };
-
 double fRand(double fMin, double fMax);
 void initSeed(int seed);
 SBPNN* readBPNN(SBPNN *, char* filename);
 void saveBPNN(SBPNN *, char *filename);
 SBPNN* createBPNN(int n_in,int n_hidden,int n_out);
 void freeBPNN(SBPNN *);
-void test(SBPNN *, double *input_unit,int input_num,double *target,int target_num);
+bool test(SBPNN *, double *input_unit,int input_num,double *target,int target_num);
 
 void train(SBPNN *, double *input_unit,int input_num, double *target,int target_num, double *eo, double *eh);
 
