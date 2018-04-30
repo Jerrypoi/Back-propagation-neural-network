@@ -104,14 +104,13 @@ int main(int argc, const char * argv[]) {
     BPNet bpnet(input_n,hidden_n,out_n);
     err = 0;
     while (!file.eof()) {
-        
         err += bpnet.train(file);
     }
     cout<<"After first train, err = "<<err<<endl;
     file.close();
     file.open(filename);
     ofstream save_err_file("err");
-    while(err > 1000) {
+    while(err > 9400) {
         err = 0;
         while (!file.eof()) {
             err += bpnet.train(file);

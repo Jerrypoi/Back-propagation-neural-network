@@ -178,7 +178,7 @@ double BPNet::getError() {
         output_delta[i] = -(target[i] - output_units[i])*output_units[i] * (1 - output_units[i]);
         err += fabs(target[i] - output_units[i]);
     }
-    for(int i = 1; i < hidden_n;i++) {
+    for(int i = 0; i < hidden_n;i++) {
         double sum = 0;
         for(int j = 0;j < output_n;j++)
             sum += output_delta[j] * hidden_weights[i + 1][j];
@@ -186,6 +186,7 @@ double BPNet::getError() {
     }
     return err;
 }
+
 void BPNet::adjustWeights() {
     for(int i = 0;i < hidden_n + 1;i++) {
         for(int j = 0;j < output_n;j++) {
