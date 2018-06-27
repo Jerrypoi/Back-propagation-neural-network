@@ -27,7 +27,6 @@
 /* Begin PBXFileReference section */
 		C497C75920901D4600F16EC5 /* CBPNet.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CBPNet.cpp; sourceTree = "<group>"; };
 		C497C75A20901D4600F16EC5 /* CBPNet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CBPNet.hpp; sourceTree = "<group>"; };
-		C4AE44492081028500303995 /* sample_data */ = {isa = PBXFileReference; lastKnownFileType = text; path = sample_data; sourceTree = "<group>"; };
 		C4D87503206D1BFB00ADA09C /* SBPNN */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SBPNN; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4D87506206D1BFB00ADA09C /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		C4D8750D206D1CC700ADA09C /* SBPNN.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SBPNN.cpp; sourceTree = "<group>"; };
@@ -68,7 +67,6 @@
 				C4D87506206D1BFB00ADA09C /* main.cpp */,
 				C497C75A20901D4600F16EC5 /* CBPNet.hpp */,
 				C4D8750D206D1CC700ADA09C /* SBPNN.cpp */,
-				C4AE44492081028500303995 /* sample_data */,
 				C4D8750E206D1CC700ADA09C /* SBPNN.hpp */,
 			);
 			path = SBPNN;
@@ -250,6 +248,7 @@
 		C4D8750B206D1BFB00ADA09C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_USE_OPTIMIZATION_PROFILE = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9D3G8QJ2WE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -259,6 +258,7 @@
 		C4D8750C206D1BFB00ADA09C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_USE_OPTIMIZATION_PROFILE = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9D3G8QJ2WE;
 				PRODUCT_NAME = "$(TARGET_NAME)";

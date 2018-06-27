@@ -58,7 +58,7 @@ struct SBPNN {
 
 double fRand(double fMin, double fMax);
 void initSeed(int seed);
-void readBPNN(SBPNN *, char* filename);
+SBPNN* readBPNN(SBPNN *, char* filename);
 void saveBPNN(SBPNN *, char *filename);
 SBPNN* createBPNN(int n_in,int n_hidden,int n_out);
 void freeBPNN(SBPNN *);
