@@ -22,6 +22,7 @@ void train_net(BPNet *net,ifstream *file,string filename) {
         file->close();
         file->open(filename);
         cout<<"Train completed, error = "<<err<<endl;
+        cout<<"You can input \"save\" to foce save current weights and quit the program."<<endl;
     }
 
     filename = "CBPnet_result.txt";
@@ -32,9 +33,16 @@ void train_net(BPNet *net,ifstream *file,string filename) {
 int main() {
     string filename;
     char dowhat;
-    const int input_n = 28 * 28;
-    const int hidden_n = 64;
-    const int out_n = 10;
+
+    int input_n = 28 * 28;
+    int hidden_n = 64;
+    int out_n = 10;
+    cout<<"Please input the number of input layer units: ";
+    cin>>input_n;
+    cout<<"and the number of hidden layer units: ";
+    cin>> hidden_n;
+    cout<<"and the number of output layer units: ";
+    cin>>out_n;
     cout<<"Please choose whether to test existing weights file or to train one. Enter y for testing"<<endl;
     cin>>dowhat;
     if(dowhat != 'y' && dowhat != 'Y') {
